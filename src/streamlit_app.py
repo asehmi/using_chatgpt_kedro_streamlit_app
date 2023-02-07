@@ -1,6 +1,13 @@
 import pandas as pd
 import numpy as np
 
+import streamlit as st
+import streamlit.components.v1 as components
+
+if (st.secrets['OS'] == 'unix') and (st.secrets['IS_ST_CLOUD'] == True):
+    from st_cloud_install_talib import install_talib
+    install_talib()
+
 from crypto_fc.constants import (
     SYMBOL_DEFAULT,
     OCLH_PERIOD,
@@ -13,9 +20,6 @@ from crypto_fc.constants import (
 from crypto_fc.data import MyDataCatalog
 from crypto_fc.nodes import train_model, evaluate_model, plot_metric
 from crypto_fc.pipeline import create_pipeline, run_pipeline 
-
-import streamlit as st
-import streamlit.components.v1 as components
 
 # https://plotly.com/python/plotly-express/#gallery
 # https://plotly.com/python/creating-and-updating-figures/
