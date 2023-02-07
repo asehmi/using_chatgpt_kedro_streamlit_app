@@ -2,11 +2,51 @@
 # See: https://chanin.streamlit.app/
 # @asehmi - Modified to add kedro button icon
 
+style_css = """
+.appview-container {    
+    /* color: white; */
+    /* background-color: black; */
+    overflow: auto;            
+}            
+div[class="css-hxt7ib e1fqkh3o2"] {    
+    /* color: white; */
+    /* background-color: black; */
+    max-width: 100%;
+    padding-top: 30px;
+    overflow: auto;            
+}            
+div[class="block-container css-18e3th9 egzxvld2"] {    
+    max-width: 100%;    
+    padding-top: 30px;    
+    padding-right: 0px;    
+    padding-left: 30px;    
+    padding-bottom: 0px;            
+}
+/*
+MainMenu {
+    visibility: hidden;
+}
+*/
+header {
+    visibility: visible;
+    height: 0%;            
+}
+/*
+footer {
+    visibility: hidden;
+}
+*/
+"""
+
 import streamlit as st
 
 def load_css():
-    with open("./style.css") as f:
-        st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
+    try:
+        # Can't get find style.css is st cloud, so have a fallback (probably need to create a ./static folder for it)
+        with open("style.css") as f:
+            st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
+    except:
+        st.markdown('<style>{}</style>'.format(style_css), unsafe_allow_html=True)
     st.markdown('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">', unsafe_allow_html=True)
 
 def st_button(icon, url, label, iconsize):
