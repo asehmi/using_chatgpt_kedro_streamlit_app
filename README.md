@@ -1,5 +1,7 @@
 # Using ChatGPT to build a Kedro ML pipeline and Streamlit frontend
 
+![App Screen Shot](https://raw.githubusercontent.com/asehmi/using_chatgpt_kedro_streamlit_app/main/images/screenshots.png)
+
 I recently came across an open-source Python DevOps framework Kedro and thought, “Why not  have ChatGPT teach me how to use it to build some ML/DevOps automation?” The idea was to:
 1. Ask ChatGPT some basic questions about Kedro.
 2. Ask it to use more advanced features in the Kedro framework.
