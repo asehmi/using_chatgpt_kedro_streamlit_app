@@ -1,0 +1,33 @@
+.appview-container {    
+    /* color: white; */
+    /* background-color: black; */
+    overflow: auto;            
+}            
+div[class="css-hxt7ib e1fqkh3o2"] {    
+    /* color: white; */
+    /* background-color: black; */
+    max-width: 100%;
+    padding-top: 30px;
+    overflow: auto;            
+}            
+div[class="block-container css-18e3th9 egzxvld2"] {    
+    max-width: 100%;    
+    padding-top: 30px;    
+    padding-right: 0px;    
+    padding-left: 30px;    
+    padding-bottom: 0px;            
+}
+/*
+MainMenu {
+    visibility: hidden;
+}
+*/
+header {
+    visibility: visible;
+    height: 0%;            
+}
+/*
+footer {
+    visibility: hidden;
+}
+*/

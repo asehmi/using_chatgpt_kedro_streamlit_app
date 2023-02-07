@@ -1,0 +1,15 @@
+import datetime as dt
+
+SYMBOL_DEFAULT = 'UNI'
+START_DATE = dt.datetime(2022,6,1) # JUNE 1, 2022
+DATA_INDEX = lambda x: x.index >= START_DATE
+
+SPLIT_DATE = dt.datetime(2022,11,1) # NOVEMBER 1, 2022
+TRAIN_INDEX = lambda x: x.index < SPLIT_DATE
+TEST_INDEX = lambda x: x.index >= SPLIT_DATE
+
+OCLH_PERIOD = '15min'
+TIME_PERIOD = 6
+SHORT_PERIOD = TIME_PERIOD
+LONG_PERIOD = int(TIME_PERIOD * 2)
+FORECAST_HORIZON = 1
