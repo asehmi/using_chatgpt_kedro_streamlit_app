@@ -2,7 +2,7 @@ debugpy
 requests
 numpy
 pandas
-talib
+# talib # uncomment if local
 scikit-learn>=1.1.2
 streamlit>=1.15.0
 black~=22.0
