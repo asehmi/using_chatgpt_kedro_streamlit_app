@@ -1,7 +1,8 @@
 from typing import List
 import pandas as pd
+# https://github.com/twopirllc/pandas-ta
+import pandas_ta as ta
 import numpy as np
-import talib
 
 from .constants import (
     OCLH_PERIOD,
@@ -89,15 +90,15 @@ class MyDataCatalog(DataCatalog):
         # SecurityPrice indicators
         close_price_pct_change = close_price.pct_change(periods=1, fill_method='bfill')
 
-        rsi = talib.RSI(close_price.to_numpy(dtype='float'), timeperiod=timeperiod)
+        rsi = ta.rsi(close_price, length=timeperiod)
 
-        ema_short = talib.EMA(close_price.to_numpy(dtype='float'), ema_short_period) 
-        ema_long = talib.EMA(close_price.to_numpy(dtype='float'), ema_long_period) 
+        ema_short = ta.ema(close_price, length=ema_short_period) 
+        ema_long = ta.ema(close_price, length=ema_long_period) 
 
-        obv = talib.OBV(close_price.to_numpy(dtype='float'), volume.to_numpy(dtype='float'))
+        obv = ta.obv(close_price, volume)
 
-        obv_ema_short = talib.EMA(obv, ema_short_period)
-        obv_ema_long = talib.EMA(obv, ema_long_period)
+        obv_ema_short = ta.ema(obv, length=ema_short_period)
+        obv_ema_long = ta.ema(obv, length=ema_long_period)
 
         # Volatility measures
         

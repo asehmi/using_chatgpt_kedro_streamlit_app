@@ -4,10 +4,6 @@ import numpy as np
 import streamlit as st
 import streamlit.components.v1 as components
 
-if (st.secrets['OS'] == 'unix') and (st.secrets['IS_ST_CLOUD'] == True):
-    from st_cloud_install_talib import install_talib
-    install_talib()
-
 from crypto_fc.constants import (
     SYMBOL_DEFAULT,
     OCLH_PERIOD,
