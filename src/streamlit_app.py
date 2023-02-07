@@ -1,3 +1,4 @@
+import time
 import pandas as pd
 import numpy as np
 from PIL import Image
@@ -311,13 +312,14 @@ def show_pipeline_viz(symbol):
     # Render the pipeline graph (cool demo here: https://demo.kedro.org/)
     st.subheader('KEDRO PIPELINE VISUALIZATION')
     
+    reporter = st.empty()
+    
     if st.secrets['IS_ST_CLOUD']:
         st.markdown('**_The interactive pipeline visualization is only available when running this app on your local computer. Please [clone the app](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) and run it locally._**')
         st.write("Here's a preview image of what you will see:")
         st.image(Image.open('./images/kedro_viz.png'))
         return
 
-    st.caption(f'This interactive pipeline visualization is for {SYMBOL_DEFAULT} but is the same for all coins.')
     if not state['kedro_viz_started']:
         import os
         import subprocess
@@ -330,16 +332,24 @@ def show_pipeline_viz(symbol):
             return proc
 
         if st.secrets['OS'] == 'windows':
-            job = [os.path.join('..\\', 'run_kedro_viz.cmd')]
+            job = [os.path.join('.\\', 'run_kedro_viz.cmd')]
         else:
-            job = [os.path.join('../', 'run_kedro_viz.sh')]
+            job = [os.path.join('./', 'run_kedro_viz.sh')]
 
+        reporter.warning('Starting visualization server...')
+        time.sleep(3)
         # server thread will remain active as long as streamlit thread is running, or is manually shutdown
         thread = threading.Thread(name='Kedro-Viz', target=_run_job, args=(job,), daemon=True)
         thread.start()
         state['kedro_viz_started'] = True
-        
+        reporter.info('Waiting a couple of seconds for server to start...')
+        # give it time to start
+        time.sleep(3)
+
     if state['kedro_viz_started']:
+        reporter.empty()
+        st.button('Click to force a frame reload (if required)')
+        st.caption(f'This interactive pipeline visualization is for {SYMBOL_DEFAULT} but is the same for all coins.')
         components.iframe('http://127.0.0.1:4141/', width=1500, height=800)
     
     

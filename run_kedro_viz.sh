@@ -1,2 +1,1 @@
-cd ..\
-sh kedro viz
+sh kedro viz --no-browser

@@ -1,0 +1,1 @@
+streamlit run --server.port=2023 src\streamlit_app.py
