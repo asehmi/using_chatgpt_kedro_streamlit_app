@@ -2,6 +2,8 @@
 # See: https://chanin.streamlit.app/
 # @asehmi - Modified to add kedro button icon
 
+import streamlit as st
+
 style_css = """
 .appview-container {    
     /* color: white; */
@@ -37,8 +39,6 @@ footer {
 }
 */
 """
-
-import streamlit as st
 
 def load_css():
     try:

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from PIL import Image
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -313,7 +314,7 @@ def show_pipeline_viz(symbol):
     if st.secrets['IS_ST_CLOUD']:
         st.markdown('**_The interactive pipeline visualization is only available when running this app on your local computer. Please [clone the app](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) and run it locally._**')
         st.write("Here's a preview image of what you will see:")
-        st.image('./images/kedro_viz.png')
+        st.image(Image.open('./images/kedro_viz.png'))
         return
 
     st.caption(f'This interactive pipeline visualization is for {SYMBOL_DEFAULT} but is the same for all coins.')
@@ -346,7 +347,7 @@ with st.sidebar:
     def _show_table_checkbox_cb():
         state['show_table'] = state['show_table_checkbox']
 
-    st.image('./images/a12i_logo.png', )
+    st.image(Image.open('./images/a12i_logo.png'))
     top_level = st.radio('What would you like to do?', [
         '📈 View source data charts', 
         '👣 Run model (manual)', 
