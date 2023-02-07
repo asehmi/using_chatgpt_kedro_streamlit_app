@@ -50,53 +50,17 @@ def evaluate_model(model, data):
 	return y, y_pred, mse
 
 
-def plot_metric(symbol, y, y_pred, mse, show_pipeline=True):
+def plot_metric(symbol, y, y_pred, mse):
 	result_df = pd.DataFrame(y)
 	result_df['close_pred_t1'] = y_pred
 	result_df['close_pred_t1'] = result_df['close_pred_t1'].shift(-1)
+	result_df.dropna(inplace=True)
+ 
+	print(f'Saving {symbol} predictions for display in Streamlit...')	
+	result_df.to_csv(f'./data/{symbol.lower()}_predictions.csv', index=False, encoding='utf-8')
 
-	if not IS_STREAMLIT:
-		print('\n\n', '🤒 Mean Square Error (MSE)', f'{round(mse * 100, 3)}%', '\n\n')
-		print(result_df)
-		return
-
-	st.markdown(f'### PREDICTIONS for {symbol}')
-	st.write('')
-	c1, c2, _ = st.columns([1,1,3])
-	with c1:
-		st.markdown('##### 🤒 Mean Square Error (MSE)')
-		st.metric('Mean Square Error (MSE)', f'{round(mse * 100, 3)}%' , f'{round((0.05 - mse) * 100, 3)}%', label_visibility='collapsed')
-	with c2:
-		if show_pipeline:
-			# Launch button will only work locally
-			if not st.secrets['IS_ST_CLOUD']:
-				st.markdown('##### ⚙️ Pipeline visualization')
-				st_functions.st_button('kedro', 'http://127.0.0.1:4141/', 'Launch Kedro-Viz', 40)
-			else:
-				st.markdown('##### ⚙️ Pipeline specification')
-				st.caption('_Please [clone the app](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) and run it locally to get an interactive pipeline visualization._')
-    
-			if st.checkbox('Show specification', False):
-				with open(f'./data/{symbol.lower()}_pipeline.json', 'rt', encoding='utf-8') as fp:
-					pipeline_json = fp.read()
-				st.json(pipeline_json, expanded=True)
-  
-	if state['show_table']:
-		st.markdown('---')
-		st.subheader('Data')
-		st.write(result_df)
-
-	st.markdown('---')
-	st.subheader('Chart')
-	fig = px.line(
-		result_df,
-		x=result_df.index, y=['close_t1', 'close_pred_t1'],
-		labels={result_df.index.name: 'T', 'close_t1': f'{symbol} Price ($)', 'close_pred_t1': f'{symbol} Price Prediction ($)'},
-		title=f'Price Prediction: {symbol}',
-		width=1200, height=800,
-		**state['chart_kwargs']
-	)
-	st.plotly_chart(fig, theme=state['chart_theme'])
+	print('\n\n', '🤒 Mean Square Error (MSE)', f'{round(mse * 100, 3)}%', '\n\n')
+	print(result_df)
 
 def train_test_split_2(data: pd.DataFrame) -> List[pd.DataFrame]:
     df_features = data.copy()

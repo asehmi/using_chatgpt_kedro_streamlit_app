@@ -49,10 +49,10 @@
 # Configure primary exchange source data for all coins
 crypto_candles_data:
     type: pandas.CSVDataSet
-    filepath: src/data/crypto_candles_data.csv
+    filepath: data/crypto_candles_data.csv
 
 # Configure dataset corresponding to SYMBOL_DEFUALT (which happens to be 'UNI')
 # You will have had to run the Streamlit app first to generate this source file!
 uni_crypto_features_data:
     type: pandas.CSVDataSet
-    filepath: src/data/uni_crypto_features_data.csv
+    filepath: data/uni_crypto_features_data.csv
