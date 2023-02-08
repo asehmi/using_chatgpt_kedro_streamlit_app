@@ -13,7 +13,7 @@
 
 ### Introduction
 
-I recently came across an open-source Python DevOps framework Kedro and thought, “Why not  have ChatGPT teach me how to use it to build some ML/DevOps automation?” The idea was to:
+I recently came across an open-source Python DevOps framework [Kedro](https://kedro.org/) and thought, “Why not  have [ChatGPT](https://chat.openai.com/chat) teach me how to use it to build some ML/DevOps automation?” The idea was to:
 1. Ask ChatGPT some basic questions about Kedro.
 2. Ask it to use more advanced features in the Kedro framework.
 3. Write my questions with hints and phrases that encouraged explanations of advanced Kedro features (to evolve incrementally as if I were taught by a teacher).
@@ -27,7 +27,7 @@ Kedro has some pipeline visualization capabilities, so I wondered:
 
 I wrote a blog post with annotated responses to the answers I got to my questions. I was super impressed and decided to implement the Kedro pipeline and Streamlit application as planned from what I learned. This repository contains all the code for the application. 
 
-### Try the app yourself
+### Try the Streamlit app yourself
 
 The application can be seen running in the Streamlit Cloud at the link below:
 
@@ -37,12 +37,23 @@ The application can be seen running in the Streamlit Cloud at the link below:
 - OCLH data is for 4 coins spanning the period June 1, 2022 to December 31, 2022
 - OCLH data is in 15min frequency
 - A Kedro data catalog of source and feature datasets is built for each coin and subsequently used in the Kedro ML pipeline
-- You can run the Kedro ML pipeline to train, test and evaluate a Linear Regression model to predict next period (t+1) prices
+- You can run the Kedro ML pipeline to train, test and evaluate a Linear Regression model to predict next period (t+1) close prices from several feature techical indicators derived from the close price and volume 
 - You can visualize candlestick and line charts for the source and feature datasets, by coin
-- Locally, you can visualize an interactive graph representation of the Kedro pipeline
-- You can run the pipeline nodes and the pipeline visualization from the command line using Kedro's CLI tools
+- Run locally, you can visualize an interactive graph representation of the Kedro pipeline in the Streamlit application
+- You can run the pipeline nodes and the pipeline visualization from the command line too, using Kedro's CLI tools
 
-**Note**: _This is a demo of Kedro and Streamlit concepts and the results should not be taken seriously! The model is highly simplistic._
+For Streamlit beginners, this aplication can be useful to learn how to:
+- Structure a multipage application
+- Use session state
+- Use widget callbacks
+- Use many different widgets
+- Launch sub-processes
+- Embed external GUIs
+- Cache data and clear caches
+- Plotly charting
+- (Check out my [gists](https://gist.github.com/asehmi) for more Streamlit goodies)
+
+**Note**: _This is a demo of Kedro and Streamlit concepts and the results should not be taken seriously! The Linear Regression model is highly simplistic._
 
 ## Installation
 
@@ -155,8 +166,8 @@ You should see this displayed in a browser window:
 
 ---
 
-If you enjoyed this app, please consider starring this repository.
+If you enjoyed this app and learned something, please consider starring its repository.
 
-Thanks!
+Many thanks!
 
 Arvindra

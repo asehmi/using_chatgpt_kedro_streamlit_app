@@ -1,4 +1,4 @@
-"""Iris file for ensuring the package is executable
+"""crypto_fc file for ensuring the package is executable
 as `crypto_fc` and `python -m crypto_fc`
 """
 import importlib

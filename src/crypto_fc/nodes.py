@@ -1,23 +1,9 @@
-import os
-import psutil
 from typing import List
 import pandas as pd
 import numpy as np
 
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
-
-# These nodes can be run from Kedro's CLI, so don't import interactive GUI stuff
-ppid = os.getppid() # Get parent process id
-print(psutil.Process(ppid).name().lower())
-IS_STREAMLIT = (psutil.Process(ppid).name().lower() == 'streamlit.exe')
-# This will work for Streamlit (interactive mode), but not from Kedro's CLI
-print("🎈 Running in Streamlit") if IS_STREAMLIT else print("🥁 Running from Kedro's CLI")
-if IS_STREAMLIT:
-	import plotly.express as px
-	import streamlit as st
-	import st_functions
-	state = st.session_state
 
 from .constants import (
     TRAIN_INDEX,
@@ -34,7 +20,7 @@ def get_symbol(data) -> str:
 
 def train_model(data):
 	# Split the data into features and targets
-	X = data.drop(['symbol', 'close_t1', 'series_id'], axis=1)
+	X = data.drop(['symbol', 'open', 'close', 'low', 'high', 'close_t1', 'series_id'], axis=1)
 	y = data['close_t1']
 	# Create a LinearRegression model and fit it to the data
 	model = LinearRegression()
@@ -42,7 +28,7 @@ def train_model(data):
 	return model
 
 def evaluate_model(model, data):
-	X = data.drop(['symbol', 'close_t1', 'series_id'], axis=1)
+	X = data.drop(['symbol', 'open', 'close', 'low', 'high', 'close_t1', 'series_id'], axis=1)
 	y = data['close_t1']
 	# Make predictions using the model and calculate the mean squared error
 	y_pred = model.predict(X)

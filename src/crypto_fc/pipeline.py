@@ -45,7 +45,7 @@ def create_pipeline(**kwargs) -> Pipeline:
     
     return pipeline_instance
 
-# COMMENT: ChatGPT guessed that piepline could be 'run' directly. In fact Pipeline doesn't have a run attribute.
+# COMMENT: ChatGPT guessed that pipeline could be 'run' directly. In fact Pipeline doesn't have a run attribute.
 # One must create an executor and run the pipeline through that!
 
 # Execute the pipeline

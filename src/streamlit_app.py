@@ -59,6 +59,12 @@ if 'chart_kwargs' not in state:
 if 'chart_template' not in state:
     state['chart_template'] = 'plotly_dark'
 
+if 'show_table' not in state:
+    state['show_table'] = False
+
+if 'menu_choice' not in state:
+    state['menu_choice'] = 0
+
 def _set_chart_theme_cb():
     if state['key_chart_theme']:
         state['chart_theme'] = 'streamlit'
@@ -67,9 +73,15 @@ def _set_chart_theme_cb():
         state['chart_theme'] = None
         state['chart_kwargs'] = {'template': state['chart_template']}
 
+def _charts_selectbox_cb(menu_map):
+    state['menu_choice'] = list(menu_map.keys()).index(state['charts_selectbox'])
+
 def _set_chart_template_cb():
     state['chart_template'] = state['key_chart_template']
     state['chart_kwargs'] = {'template': state['chart_template']}
+
+def _show_table_checkbox_cb():
+    state['show_table'] = state['show_table_checkbox']
 
 # -----------------------------------------------------------------------------
 # DATA WRAPPERS
@@ -131,7 +143,7 @@ def launch_kedro_viz_server(reporter):
 
 #----------------------------------------------------------------------------
 # 
-# PAGE display functions
+# PAGE DISPLAY FUNCTIONS
 #
 #----------------------------------------------------------------------------
 # CANDLESTICKS
@@ -301,16 +313,60 @@ def page_predictions(symbol):
 # -----------------------------------------------------------------------------
 # SETTINGS and MENU
 
-state = st.session_state
-if 'show_table' not in state:
-    state['show_table'] = False
-if 'menu_choice' not in state:
-    state['menu_choice'] = 0
-    
-def view_source_data_charts(symbol):
+def sidebar_menu():
+    with st.sidebar:
+        c1, _ = st.columns([1,1])
+        with c1:
+            st.image(Image.open('./images/a12i_logo.png'))
+        st.header('Kedro ML Pipeline')
+        menu_selection = st.radio('What would you like to do?', [
+            '📈 View source data charts', 
+            '👣 Run model (manual)', 
+            '🥁 Run model (pipeline orchestration)',
+            '❤️ Pipeline visualization (embedded)',
+            '🙋 About',
+        ], horizontal=False)
+    return menu_selection
 
-    def _charts_selectbox_cb(menu_map):
-        state['menu_choice'] = list(menu_map.keys()).index(state['charts_selectbox'])
+
+def sidebar_settings():
+    with st.sidebar:
+        st.subheader('Settings')
+        with st.form(key='settings_form'):
+            options = ['LTC', 'SOL', 'UNI', 'DOT']
+            symbol = st.selectbox('💰 Select coin', options=options, index=1)
+            st.form_submit_button('Apply', type='primary')
+        st.checkbox('🔢 Show source data table', state['show_table'], key='show_table_checkbox', on_change=_show_table_checkbox_cb)
+    return symbol
+
+
+def sidebar_chart_style_and_other_settings():
+    with st.sidebar:
+        st.subheader('Chart style')
+        c1, c2 = st.columns(2)
+        with c1:
+            st.caption('🎈 Theme')
+            st.checkbox('Streamlit', value=state['chart_theme'], on_change=_set_chart_theme_cb, key='key_chart_theme')
+        with c2:
+            if not state['chart_theme']:
+                st.caption('🌈 Template')
+                st.selectbox(
+                    'Label should not be visible', options=px_templates, index=px_templates.index(state['chart_template']), 
+                        label_visibility='collapsed', on_change=_set_chart_template_cb, key='key_chart_template'
+                )
+
+        st.markdown('---')
+        if st.button('🧹 Clear cache', type='primary', help='Refresh source data and data catalog for this application'):
+            data_catalog.clear()
+            load_data.clear()
+            load_features.clear()
+            _convert_df_to_csv.clear()
+            st.experimental_rerun()
+
+# -----------------------------------------------------------------------------
+# TOP LEVEL MENU ACTIONS
+
+def view_source_data_charts(symbol):
 
     df_oclh = load_data(symbol)
     df_features = load_features(symbol)
@@ -376,6 +432,7 @@ def view_source_data_charts(symbol):
     args = menu_map[menu_choice][1]
     fn(*args)
 
+
 def run_model_manual(symbol):
     df_features = load_features(symbol)
     model = train_model(df_features[TRAIN_INDEX])
@@ -383,13 +440,14 @@ def run_model_manual(symbol):
     plot_metric(symbol, y, y_pred, mse)
     page_predictions(symbol)
     
+
 def run_model_pipeline(symbol):
     pipeline_json = create_pipeline(**{'symbol': symbol}).to_json()
     with open(f'./data/{symbol.lower()}_pipeline.json', 'wt', encoding='utf-8') as fp:
         fp.write(pipeline_json)
-
     run_pipeline(symbol, data_catalog())
     page_predictions(symbol)
+
 
 def show_pipeline_viz(symbol):
     # Render the pipeline graph (cool demo here: https://demo.kedro.org/)
@@ -439,67 +497,34 @@ def show_about():
         - Could I connect Kedro logs to a cloud-based logging service?
         - Could ChatGPT contrast Kedro with similar (competing) products and services and show me how the pipeline it developed earlier could be implemented in one of them?
 
-        I wrote a blog post (link pending) with annotated responses to the answers I got to my questions. I was super impressed and decided to implement the 
-        Kedro pipeline and Streamlit application as planned from what I learned. My [GitHub](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) repository 
-        contains all the code for the application.
+        I wrote a blog post (link pending) with annotated responses to the answers I got to my questions plan. I was super impressed and decided to implement the 
+        Kedro pipeline and Streamlit application from what I learned. My [GitHub](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) repository 
+        contains the code for the application and details of installing and running it yourself. 
+        
+        The code is released to the public under MIT License. 
         
         Happy Streamlit-ing! 🎈
     """)
 
-with st.sidebar:
-    def _show_table_checkbox_cb():
-        state['show_table'] = state['show_table_checkbox']
+# -----------------------------------------------------------------------------
+# TOP LEVEL MENU ACTIONS DISPATCHER
 
-    c1, _ = st.columns([1,1])
-    with c1:
-        st.image(Image.open('./images/a12i_logo.png'))
-    st.header('Kedro ML Pipeline')
-    top_level = st.radio('What would you like to do?', [
-        '📈 View source data charts', 
-        '👣 Run model (manual)', 
-        '🥁 Run model (pipeline orchestration)',
-        '❤️ Pipeline visualization (embedded)',
-        '🙋 About',
-    ], horizontal=False)
-
-    st.subheader('Settings')
-    with st.form(key='settings_form'):
-        options = ['LTC', 'SOL', 'UNI', 'DOT']
-        symbol = st.selectbox('💰 Select coin', options=options, index=1)
-        st.form_submit_button('Apply', type='primary')
-    st.checkbox('🔢 Show source data table', state['show_table'], key='show_table_checkbox', on_change=_show_table_checkbox_cb)
-
-
-if top_level == '📈 View source data charts':
+menu_selection = sidebar_menu()
+if menu_selection == '📈 View source data charts':
+    symbol = sidebar_settings()
     view_source_data_charts(symbol)
-if top_level == '👣 Run model (manual)':
+    sidebar_chart_style_and_other_settings()
+if menu_selection == '👣 Run model (manual)':
+    symbol = sidebar_settings()
     run_model_manual(symbol)
-if top_level == '🥁 Run model (pipeline orchestration)':
+    sidebar_chart_style_and_other_settings()
+if menu_selection == '🥁 Run model (pipeline orchestration)':
+    symbol = sidebar_settings()
     run_model_pipeline(symbol)
-if top_level == '❤️ Pipeline visualization (embedded)':
+    sidebar_chart_style_and_other_settings()
+if menu_selection == '❤️ Pipeline visualization (embedded)':
+    symbol = sidebar_settings()
     show_pipeline_viz(symbol)
-if top_level == '🙋 About':
+    sidebar_chart_style_and_other_settings()
+if menu_selection == '🙋 About':
     show_about()
-
-
-with st.sidebar:
-    st.subheader('Chart style')
-    c1, c2 = st.columns(2)
-    with c1:
-        st.caption('🎈 Theme')
-        st.checkbox('Streamlit', value=state['chart_theme'], on_change=_set_chart_theme_cb, key='key_chart_theme')
-    with c2:
-        if not state['chart_theme']:
-            st.caption('🌈 Template')
-            st.selectbox(
-                'Label should not be visible', options=px_templates, index=px_templates.index(state['chart_template']), 
-                    label_visibility='collapsed', on_change=_set_chart_template_cb, key='key_chart_template'
-            )
-
-    st.markdown('---')
-    if st.button('🧹 Clear cache', type='primary', help='Refresh source data and data catalog for this application'):
-        data_catalog.clear()
-        load_data.clear()
-        load_features.clear()
-        _convert_df_to_csv.clear()
-        st.experimental_rerun()

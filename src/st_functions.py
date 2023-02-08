@@ -42,7 +42,7 @@ footer {
 
 def load_css():
     try:
-        # Can't get find style.css is st cloud, so have a fallback (probably need to create a ./static folder for it)
+        # Can't find style.css is st cloud, so have a fallback (probably need to create a ./static folder for it)
         with open("style.css") as f:
             st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
     except:
