@@ -53,7 +53,13 @@ For Streamlit beginners, this aplication can be useful to learn how to:
 - Plotly charting
 - (Check out my [gists](https://gist.github.com/asehmi) for more Streamlit goodies)
 
-**Note**: _This is a demo of Kedro and Streamlit concepts and the results should not be taken seriously! The Linear Regression model is highly simplistic._
+## Disclaimer
+
+**Note**: _This application is a demo of Kedro and Streamlit concepts and the results should not be taken seriously! The Linear Regression model is highly simplistic._
+
+- All investments involve risk, and the past performance of a crypto-currency, security, industry, sector, market, financial product, trading strategy, or individual’s trading does not guarantee future results or returns.
+- Investors are fully responsible for any investment decisions they make. Such decisions should be based solely on an evaluation of their financial circumstances, investment objectives, risk tolerance, and liquidity needs.
+- The information you derive from the outputs of this application do not constitute investment advice. I will not accept liability for any loss or damage, including without limitation any loss of profit, which may arise directly or indirectly from use of or reliance on such information.
 
 ## Installation
 
