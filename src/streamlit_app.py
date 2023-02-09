@@ -473,38 +473,44 @@ def show_pipeline_viz(symbol):
 
 def show_about():
     c1, _ = st.columns([1,2])
-    c1.markdown("""
-        ## Using ChatGPT to build a Kedro ML pipeline
+    with c1:
+        st.markdown("""
+            ## Using ChatGPT to build a Kedro ML pipeline
 
-        Hi community! 👋
+            Hi community! 👋
 
-        My name is Arvindra Sehmi, and I'm an active member of the Streamlit Creators group. I’m on a break from a 35-year-long career in tech 
-        (currently advising [Auth0.com](http://auth0.com/), [Macrometa.com](http://macrometa.com/), [Tangle.io](http://tangle.io/), 
-        [Crowdsense.ai](https://crowdsense.ai/), and [DNX ventures](https://www.dnx.vc/)) and am taking the opportunity to learn new software development tools.
+            My name is Arvindra Sehmi, and I'm an active member of the Streamlit Creators group. I’m on a break from a 35-year-long career in tech 
+            (currently advising [Auth0.com](http://auth0.com/), [Macrometa.com](http://macrometa.com/), [Tangle.io](http://tangle.io/), 
+            [Crowdsense.ai](https://crowdsense.ai/), and [DNX ventures](https://www.dnx.vc/)) and am taking the opportunity to learn new software development tools.
 
-        I recently came across an open-source Python DevOps framework [Kedro](https://kedro.org/) and thought, "Why not  have [ChatGPT](https://chat.openai.com/chat) 
-        teach me how to use it to build some ML/DevOps automation?"
+            I recently came across an open-source Python DevOps framework [Kedro](https://kedro.org/) and thought, "Why not  have [ChatGPT](https://chat.openai.com/chat) 
+            teach me how to use it to build some ML/DevOps automation?"
 
-        The idea was to:
-        1. Ask ChatGPT some basic questions about Kedro.
-        2. Ask it to use more advanced features in the Kedro framework.
-        3. Write my questions with hints and phrases that encouraged explanations of advanced Kedro features (to evolve incrementally as if I were taught by a teacher).
+            The idea was to:
+            1. Ask ChatGPT some basic questions about Kedro.
+            2. Ask it to use more advanced features in the Kedro framework.
+            3. Write my questions with hints and phrases that encouraged explanations of advanced Kedro features (to evolve incrementally as if I were taught by a teacher).
 
-        Kedro has some pipeline visualization capabilities, so I wondered:
-        - Could ChatGPT show me how to display pipeline graphs in Streamlit?
-        - Could ChatGPT build me an example ML model and explicitly refer to it in the Kedro pipeline?
-        - What does it take to scale the pipeline, and perform pipeline logging, monitoring, and error handling?
-        - Could I connect Kedro logs to a cloud-based logging service?
-        - Could ChatGPT contrast Kedro with similar (competing) products and services and show me how the pipeline it developed earlier could be implemented in one of them?
+            Kedro has some pipeline visualization capabilities, so I wondered:
+            - Could ChatGPT show me how to display pipeline graphs in Streamlit?
+            - Could ChatGPT build me an example ML model and explicitly refer to it in the Kedro pipeline?
+            - What does it take to scale the pipeline, and perform pipeline logging, monitoring, and error handling?
+            - Could I connect Kedro logs to a cloud-based logging service?
+            - Could ChatGPT contrast Kedro with similar (competing) products and services and show me how the pipeline it developed earlier could be implemented in one of them?
 
-        I wrote a blog post (link pending) with annotated responses to the answers I got to my questions plan. I was super impressed and decided to implement the 
-        Kedro pipeline and Streamlit application from what I learned. My [GitHub](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) repository 
-        contains the code for the application and details of installing and running it yourself. 
-        
-        The code is released to the public under MIT License. 
-        
-        Happy Streamlit-ing! 🎈
-    """)
+            I wrote a blog post (link pending) with annotated responses to the answers I got to my questions plan. I was super impressed and decided to implement the 
+            Kedro pipeline and Streamlit application from what I learned. My [GitHub](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) repository 
+            contains the code for the application and details of installing and running it yourself. 
+            
+            The code is released to the public under MIT License. 
+            
+            Happy Streamlit-ing! 🎈
+        """)
+    c1, _ = st.columns([1,5])
+    with c1:
+        st_functions.st_button('twitter', 'https://twitter.com/asehmi/', 'Follow me on Twitter', 20)
+        st_functions.st_button('linkedin', 'https://www.linkedin.com/in/asehmi/', 'Follow me on LinkedIn', 20)
+        st_functions.st_button('cup', 'https://www.buymeacoffee.com/asehmi', 'Buy me a Coffee', 20)
 
 # -----------------------------------------------------------------------------
 # TOP LEVEL MENU ACTIONS DISPATCHER
