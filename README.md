@@ -31,7 +31,7 @@ I wrote a blog post with annotated responses to the answers I got to my question
 
 The application can be seen running in the Streamlit Cloud at the link below:
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://asehmi-using-chatgpt-kedro-streamlit-ap-srcstreamlit-app-14bz3i.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://kedro-ml-pipeline.streamlit.app//)
 
 - The source OCLH crypto currency data is supplied in a single CSV file, and was previously downloaded from the Bitfinex exchange
 - OCLH data is for 4 coins spanning the period June 1, 2022 to December 31, 2022
