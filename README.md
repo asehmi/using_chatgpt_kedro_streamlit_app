@@ -9,7 +9,7 @@
         mail: "vin [at] thesehmis.com"
         avatar: "https://twitter.com/asehmi/profile_image?size=original"
     related:
-        N/A
+        https://blog.streamlit.io/using-chatgpt-to-build-a-kedro-ml-pipeline/
 
 ### Introduction
 
@@ -25,7 +25,9 @@ Kedro has some pipeline visualization capabilities, so I wondered:
 - Could I connect Kedro logs to a cloud-based logging service?
 - Could ChatGPT contrast Kedro with similar (competing) products and services and show me how the pipeline it developed earlier could be implemented in one of them?
 
-I wrote a blog post with annotated responses to the answers I got to my questions. I was super impressed and decided to implement the Kedro pipeline and Streamlit application as planned from what I learned. This repository contains all the code for the application. 
+I wrote a [blog post with annotated responses to the answers I got to my questions](https://blog.streamlit.io/using-chatgpt-to-build-a-kedro-ml-pipeline/). I was super impressed and decided to implement the Kedro pipeline and Streamlit application as planned from what I learned. This repository contains all the code for the application. 
+
+> As you'll read in my blog post ChatGPT helps "understanding" and is why I found it useful for learning. The Kedro code ChatGPT generated was simplistic and in some cases wrong, but perfectly okay to get the gist of how it worked. This app is original, with small parts of it taken from Kedro's code template, so you're free to use it without any recourse under the MIT license.
 
 ### Try the Streamlit app yourself
 

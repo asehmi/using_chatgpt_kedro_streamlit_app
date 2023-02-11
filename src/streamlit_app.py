@@ -1,7 +1,9 @@
 import time
 import pandas as pd
 import numpy as np
+import datetime as dt
 from PIL import Image
+import requests
 
 from sklearn.metrics import mean_squared_error
 
@@ -45,6 +47,8 @@ from kedro.framework.project import configure_project
 package_name = Path(__file__).parent.name
 configure_project(package_name)
 
+KEDRO_VIZ_SERVER_URL = 'http://127.0.0.1:4141/'
+
 #----------------------------------------------------------------------------
 
 state = st.session_state
@@ -84,16 +88,16 @@ def _show_table_checkbox_cb():
     state['show_table'] = state['show_table_checkbox']
 
 # -----------------------------------------------------------------------------
-# DATA WRAPPERS
+# DATA WRAPPERS (uses latest Streamlit 1.18 @st.cache_data)
 
-@st.experimental_memo
+@st.cache_data(ttl=dt.timedelta(hours=1), show_spinner="Building data catalog")
 def data_catalog() -> MyDataCatalog:
     catalog = MyDataCatalog()
     datasets = catalog.build_data_catalog()
     print('Available datasets:', datasets)
     return catalog
     
-@st.experimental_memo
+@st.cache_data(ttl=dt.timedelta(hours=1), show_spinner="Loading crypto candles data")
 def load_data(symbol):
     data = data_catalog().load('crypto_candles_data')
     df_oclh = data.copy().query(f"symbol == '{symbol}' and period == '{OCLH_PERIOD}'")
@@ -101,7 +105,7 @@ def load_data(symbol):
     df_oclh.set_index('Timestamp', inplace=True)
     return df_oclh
 
-@st.experimental_memo
+@st.cache_data(ttl=dt.timedelta(hours=1), show_spinner="Loading model features data")
 def load_features(symbol):
     data = data_catalog().load(f'{symbol.lower()}_crypto_features_data')
     df_features = data.copy()
@@ -109,9 +113,12 @@ def load_features(symbol):
     df_features.set_index('Timestamp', inplace=True)
     return df_features
 
-@st.experimental_memo
+@st.cache_data(ttl=dt.timedelta(hours=1), show_spinner="Converting data to CSV")
 def _convert_df_to_csv(df: pd.DataFrame, index=False, name=None):
     return df.to_csv(index=index, encoding='utf-8')
+
+#----------------------------------------------------------------------------
+# KEDRO VIZ SERVER
 
 def launch_kedro_viz_server(reporter):
 
@@ -136,10 +143,28 @@ def launch_kedro_viz_server(reporter):
         # server thread will remain active as long as streamlit thread is running, or is manually shutdown
         thread = threading.Thread(name='Kedro-Viz', target=_run_job, args=(job,), daemon=True)
         thread.start()
-        state['kedro_viz_started'] = True
-        reporter.info('Waiting a couple of seconds for server to start...')
-        # give it time to start
+        reporter.info('Waiting for server response...')
         time.sleep(3)
+
+        retries = 5
+        while True:
+            reporter.info('Waiting for server response...')
+            # give it time to start
+            resp = None
+            try:
+                resp = requests.get(KEDRO_VIZ_SERVER_URL)
+            except:
+                pass
+            if resp and resp.status_code == 200:
+                state['kedro_viz_started'] = True
+                reporter.empty()
+                break
+            else:
+                time.sleep(1)
+            retries -= 1
+            if retries < 0:
+                reporter.info('Right click on the empty iframe and select "Reload frame"')
+                break
 
 #----------------------------------------------------------------------------
 # 
@@ -283,7 +308,7 @@ def page_predictions(symbol):
             launch_kedro_viz_server(reporter)
             if state['kedro_viz_started']:
                 reporter.empty()
-                st_functions.st_button('kedro', 'http://127.0.0.1:4141/', 'Launch Kedro-Viz', 40)
+                st_functions.st_button('kedro', KEDRO_VIZ_SERVER_URL, 'Launch Kedro-Viz', 40)
         else:
             st.markdown('##### ⚙️ Pipeline specification')
             st.caption('_Please [clone the app](https://github.com/asehmi/using_chatgpt_kedro_streamlit_app) and run it locally to get an interactive pipeline visualization._')
@@ -464,12 +489,9 @@ def show_pipeline_viz(symbol):
     launch_kedro_viz_server(reporter)
     
     if state['kedro_viz_started']:
-        reporter.empty()
-        if st.button('Click to force a frame reload (if required)'):
-            st.experimental_rerun()
         st.caption(f'This interactive pipeline visualization is for {SYMBOL_DEFAULT} but is the same for all coins.')
-        components.iframe('http://127.0.0.1:4141/', width=1500, height=800)
-    
+        components.iframe(KEDRO_VIZ_SERVER_URL, width=1500, height=800)
+   
 
 def show_about():
     c1, _ = st.columns([1,2])
